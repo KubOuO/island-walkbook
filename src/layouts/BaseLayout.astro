@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = '島嶼散步冊｜把一個下午還給城市',
+  description = '給週末城市散步者的路線與觀察手冊。',
+  currentPath = '/',
+} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://kubouo.github.io');
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <Header currentPath={currentPath} />
+      <main><slot /></main>
+      <Footer />
+    </div>
+  </body>
+</html>

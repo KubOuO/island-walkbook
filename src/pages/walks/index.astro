@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RouteCard from '../../components/RouteCard.astro';
+import FilterBar from '../../components/FilterBar.astro';
+
+const walks = (await getCollection('walks')).sort((a, b) => a.id.localeCompare(b.id));
+const cities = [...new Set(walks.map((walk) => walk.data.city))];
+const paces = [...new Set(walks.map((walk) => walk.data.pace))];
+---
+
+<BaseLayout currentPath="/walks/" title="找一條路線｜島嶼散步冊" description="依城市與步行節奏挑一條適合今天的散步路線。">
+  <section class="page-intro container">
+    <p class="eyebrow">路線索引</p>
+    <h1>今天，想把時間走到哪裡？</h1>
+    <p>用城市和節奏縮小選項，或者只輸入一個你想遇見的詞。每條路線都可以從任一站開始。</p>
+  </section>
+  <section class="section container">
+    <FilterBar cities={cities} paces={paces} />
+    <div class="route-grid">
+      {walks.map((walk) => <RouteCard walk={walk} />)}
+    </div>
+  </section>
+</BaseLayout>

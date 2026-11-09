@@ -1,0 +1,57 @@
+---
+interface Props { cities: string[]; paces: string[]; }
+const { cities, paces } = Astro.props;
+---
+
+<form class="filters" data-filter-form>
+  <div class="filter-field">
+    <label for="walk-search">搜尋路線</label>
+    <input id="walk-search" type="search" placeholder="例如：河岸、巷弄" data-filter-search />
+  </div>
+  <div class="filter-field">
+    <label for="walk-city">城市</label>
+    <select id="walk-city" data-filter-city>
+      <option value="all">全部城市</option>
+      {cities.map((city) => <option value={city}>{city}</option>)}
+    </select>
+  </div>
+  <div class="filter-field">
+    <label for="walk-pace">步行節奏</label>
+    <select id="walk-pace" data-filter-pace>
+      <option value="all">全部節奏</option>
+      {paces.map((pace) => <option value={pace}>{pace}</option>)}
+    </select>
+  </div>
+  <button class="filter-reset" type="reset" data-filter-reset>清除篩選</button>
+  <p class="filter-status" data-filter-status aria-live="polite"></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-filter-form]');
+  if (form) {
+    const search = form.querySelector<HTMLInputElement>('[data-filter-search]');
+    const city = form.querySelector<HTMLSelectElement>('[data-filter-city]');
+    const pace = form.querySelector<HTMLSelectElement>('[data-filter-pace]');
+    const status = form.querySelector<HTMLElement>('[data-filter-status]');
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-route-card]')];
+    if (!search || !city || !pace || !status) throw new Error('Filter controls are incomplete.');
+    const update = () => {
+      const query = search.value.trim().toLowerCase();
+      const chosenCity = city.value;
+      const chosenPace = pace.value;
+      let visible = 0;
+      cards.forEach((card) => {
+        const matches = (!query || card.textContent.toLowerCase().includes(query))
+          && (chosenCity === 'all' || card.dataset.city === chosenCity)
+          && (chosenPace === 'all' || card.dataset.pace === chosenPace);
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      });
+      status.textContent = `顯示 ${visible} 條路線`;
+    };
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+    form.addEventListener('reset', () => requestAnimationFrame(update));
+    update();
+  }
+</script>

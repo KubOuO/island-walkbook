@@ -1,0 +1,8 @@
+---
+interface Props { sources: any[]; }
+const { sources } = Astro.props;
+---
+
+<ul class="source-list">
+  {sources.map((source) => <li><a href={source.url} target="_blank" rel="noreferrer">{source.label} ↗</a></li>)}
+</ul>

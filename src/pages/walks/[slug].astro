@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WalkMeta from '../../components/WalkMeta.astro';
+import StopTimeline from '../../components/StopTimeline.astro';
+import SourceList from '../../components/SourceList.astro';
+
+export async function getStaticPaths() {
+  const walks = await getCollection('walks');
+  return walks.map((walk) => ({ params: { slug: walk.id.replace(/\.md$/, '') }, props: { walk } }));
+}
+
+const { walk } = Astro.props;
+const { Content } = await render(walk);
+const { data } = walk;
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout currentPath="/walks/" title={`${data.title}｜島嶼散步冊`} description={data.summary}>
+  <article>
+    <header class="walk-hero container">
+      <div>
+        <p class="eyebrow">{data.city} · {data.district}</p>
+        <h1>{data.title}</h1>
+        <p class="walk-hero__summary">{data.summary}</p>
+        <WalkMeta data={data} />
+        <a class="button button--light" href={`${base}walks/`}>回到路線索引</a>
+      </div>
+      <img class="walk-hero__image" src={`${base}images/${data.cover}`} alt={data.coverAlt} />
+    </header>
+
+    <div class="walk-content container">
+      <aside class="walk-content__rail">
+        <p><strong>怎麼抵達</strong>{data.transit}</p>
+        <p><strong>路線標籤</strong>{data.tags.join(' · ')}</p>
+      </aside>
+      <div class="prose">
+        <Content />
+        <h2>沿途節點</h2>
+        <StopTimeline stops={data.stops} />
+        <h2>資料與延伸閱讀</h2>
+        <SourceList sources={data.sources} />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

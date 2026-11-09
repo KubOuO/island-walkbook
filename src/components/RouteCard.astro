@@ -1,0 +1,26 @@
+---
+interface Props {
+  walk: any;
+  featured?: boolean;
+}
+
+const { walk, featured = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const { data } = walk;
+const slug = walk.id.replace(/\.md$/, '');
+---
+
+<a class:list={['route-card', featured && 'route-card--featured']} href={`${base}walks/${slug}/`} data-route-card data-city={data.city} data-pace={data.pace} data-duration={data.durationMinutes}>
+  <img class="route-card__image" src={`${base}images/${data.cover}`} alt={data.coverAlt} loading={featured ? 'eager' : 'lazy'} />
+  <div class="route-card__body">
+    <div class="route-card__meta">
+      <span>{data.city} · {data.district}</span>
+      <span>{data.durationMinutes} 分鐘</span>
+    </div>
+    <h3>{data.title}</h3>
+    <p>{data.summary}</p>
+    <div class="route-card__tags" aria-label="路線標籤">
+      {data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+    </div>
+  </div>
+</a>

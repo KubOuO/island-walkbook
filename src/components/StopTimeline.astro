@@ -1,0 +1,17 @@
+---
+interface Props { stops: any[]; }
+const { stops } = Astro.props;
+---
+
+<ol class="stop-list" aria-label="散步路線節點">
+  {stops.map((stop) => (
+    <li>
+      <time>{stop.time}</time>
+      <div>
+        <div class="stop-list__title"><span class="stop-list__dot" aria-hidden="true"></span><h3>{stop.name}</h3></div>
+        <p>{stop.note}</p>
+        <p class="stop-list__look">觀察：{stop.lookFor}</p>
+      </div>
+    </li>
+  ))}
+</ol>

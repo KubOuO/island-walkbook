@@ -1,0 +1,11 @@
+---
+interface Props { data: any; }
+const { data } = Astro.props;
+---
+
+<dl class="walk-meta" aria-label="路線資訊">
+  <div class="walk-meta__item"><dt>步行時間</dt><dd>{data.durationMinutes} 分鐘</dd></div>
+  <div class="walk-meta__item"><dt>距離</dt><dd>{data.distanceKm} 公里</dd></div>
+  <div class="walk-meta__item"><dt>節奏</dt><dd>{data.pace}</dd></div>
+  <div class="walk-meta__item"><dt>適合時段</dt><dd>{data.bestTime}</dd></div>
+</dl>

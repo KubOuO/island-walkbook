@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RouteCard from '../components/RouteCard.astro';
+
+const walks = (await getCollection('walks')).sort((a, b) => a.id.localeCompare(b.id));
+const featured = walks[0];
+const moreWalks = walks.slice(1);
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout currentPath="/" description="給週末城市散步者的路線與觀察手冊。">
+  <section class="hero container">
+    <div class="hero-copy reveal">
+      <p class="eyebrow">城市觀察手冊 · 001</p>
+      <h1>把一個下午還給城市。</h1>
+      <p>不用排滿行程。挑一條路線，留一點空白給路邊的風、還沒關門的店，和你本來不會注意到的事情。</p>
+      <a class="button" href={`${base}walks/`}>挑一條路線</a>
+    </div>
+    <div class="hero-art" aria-label="散步路線的手繪示意圖">
+      <svg class="route-sketch" viewBox="0 0 360 380" role="img" aria-labelledby="route-title route-desc">
+        <title id="route-title">一條穿過城市的散步線</title>
+        <desc id="route-desc">路線從市場出發，經過街角與河岸，最後抵達一個可以坐下來的地方。</desc>
+        <path d="M64 44 C210 25 88 124 218 152 S130 250 278 302" />
+        <circle cx="64" cy="44" r="9" /><circle cx="218" cy="152" r="9" /><circle cx="278" cy="302" r="9" />
+        <text x="82" y="42">市場</text><text x="236" y="150">街角</text><text x="294" y="306">河岸</text>
+      </svg>
+      <p class="hero-note">一條好的路線，不只告訴你去哪裡，也提醒你慢一點。</p>
+    </div>
+  </section>
+
+  <section class="section section--line container">
+    <div class="section-heading">
+      <div><p class="eyebrow">本週先走這條</p><h2>讓腳步決定下一站</h2></div>
+      <p>每一條路線都保留幾個可以停下來看的節點。你可以照走，也可以在某個轉角改變主意。</p>
+    </div>
+    {featured && <div class="feature-grid"><RouteCard walk={featured} featured /><div class="callout"><p class="eyebrow">使用方式</p><p>選一條適合今天的節奏。先讀摘要，再看節點；把手機收起來幾分鐘，城市會自己補上剩下的內容。</p><a href={`${base}about/`}>了解這本手冊怎麼長大</a></div></div>}
+  </section>
+
+  <section class="section container">
+    <div class="section-heading"><div><p class="eyebrow">三座城市</p><h2>今天想走哪裡？</h2></div><a class="button button--light" href={`${base}walks/`}>查看全部路線</a></div>
+    <div class="route-grid">{moreWalks.map((walk) => <RouteCard walk={walk} />)}</div>
+  </section>
+
+  <section class="section section--line container">
+    <div class="method-grid">
+      <div><p class="eyebrow">我們怎麼選路</p><h2>景點之外，還有一種城市閱讀。</h2></div>
+      <ol class="method-list">
+        <li><strong>01</strong><p><b>留一個空白。</b><br />每條路線控制在一個下午，讓臨時起心動念也有位置。</p></li>
+        <li><strong>02</strong><p><b>給一個觀察。</b><br />每個節點放一個可以用眼睛、耳朵或鼻子完成的小提示。</p></li>
+        <li><strong>03</strong><p><b>把來源留下。</b><br />可查證的地方資訊附上來源，讓下一次更新有清楚的起點。</p></li>
+      </ol>
+    </div>
+  </section>
+</BaseLayout>

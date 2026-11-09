@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout currentPath="/about/" title="一起新增｜島嶼散步冊" description="了解島嶼散步冊的內容規則，以及如何新增一條路線。">
+  <section class="page-intro container">
+    <p class="eyebrow">一起把這本手冊寫下去</p>
+    <h1>下一條路線，可以從你熟悉的轉角開始。</h1>
+    <p>島嶼散步冊把內容放在 Markdown 裡，讓人和 AI 都能用同一套規則新增城市、節點與觀察提示。</p>
+  </section>
+
+  <section class="about-grid container">
+    <div>
+      <p class="eyebrow">新增流程</p>
+      <h2>小而完整，先把一條路線走好。</h2>
+      <div class="callout"><p>開始前請先閱讀專案根目錄的 <a href="https://github.com/KubOuO/island-walkbook/blob/main/AGENTS.md">AGENTS.md</a>。它是內容格式、設計規則與 AI 協作流程的共同約定。</p></div>
+    </div>
+    <div>
+      <table class="rule-table">
+        <tbody>
+          <tr><th scope="row">一個檔案</th><td>每條路線放在 `src/content/walks/`，檔名就是網址 slug。</td></tr>
+          <tr><th scope="row">四個節點</th><td>至少寫出兩個沿途節點，每站包含時間、觀察與一個 lookFor 提示。</td></tr>
+          <tr><th scope="row">一個來源</th><td>歷史、交通與地點資訊要附上公開來源，方便未來校正。</td></tr>
+          <tr><th scope="row">一次檢查</th><td>完成後執行 `npm run check` 與 `npm run build`，再提交變更。</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 2rem;"><a class="button" href={`${base}walks/`}>先從現有路線開始走</a></p>
+    </div>
+  </section>
+</BaseLayout>
